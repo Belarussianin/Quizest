@@ -11,11 +11,15 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainScreenUiState, MainSc
 
     override fun getBaseViewModel() = viewModel<MainViewModel>()
 
-    override fun FragmentMainBinding.bindUI() {
+    override fun bindUI() = super.bindUI().apply {
         textView.text = "1"
         floatingActionButton.setOnClickListener {
             viewModel.onEvent(MainScreenEvent.OnFloatButtonClick("some argument"))
         }
+    }
+
+    override fun subscribeUI() = super.subscribeUI().apply {
+
     }
 
     override fun FragmentMainBinding.processLoading() {}

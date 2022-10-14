@@ -31,13 +31,13 @@ abstract class BaseFragment<Binding : ViewBinding, State : Any, Event : UiEvent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.bindUI()
-        binding.subscribeUI()
+        bindUI()
+        subscribeUI()
     }
 
-    open fun Binding.bindUI() {}
+    open fun bindUI() = binding
 
-    open fun Binding.subscribeUI() {
+    open fun subscribeUI() = binding.apply {
         viewModel.state.observe(viewLifecycleOwner) { UiState ->
             com.belarusianin.quizest.presentation.model.UiState.process(UiState,
                 onLoading = { processLoading() },
