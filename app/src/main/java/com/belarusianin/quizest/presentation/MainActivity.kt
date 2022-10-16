@@ -1,19 +1,20 @@
 package com.belarusianin.quizest.presentation
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
+import androidx.navigation.ui.setupWithNavController
 import com.belarusianin.quizest.databinding.ActivityMainBinding
-import com.belarusianin.quizest.presentation.model.UiState
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.belarusianin.quizest.presentation.activity.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private lateinit var binding: ActivityMainBinding
+    override val binding by viewBinding(ActivityMainBinding::inflate)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun ActivityMainBinding.bindUI() {
+        val navController = getNavController(binding.fragmentContainerView.id)
+        binding.setupBottomNav(navController)
+    }
+
+    private fun ActivityMainBinding.setupBottomNav(navController: NavController) {
+        bottomNav.setupWithNavController(navController)
     }
 }

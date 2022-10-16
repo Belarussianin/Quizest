@@ -1,19 +1,15 @@
 package com.belarusianin.quizest.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.belarusianin.quizest.presentation.model.UiEvent
-import com.belarusianin.quizest.presentation.model.UiState
+import com.belarusianin.quizest.presentation.model.event.UiEvent
+import com.belarusianin.quizest.presentation.model.state.UiState
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 
 abstract class BaseViewModel<State, Event> : ViewModel() where State : Any, Event : UiEvent {
 
-    abstract val state: LiveData<UiState<State>>
+    open val state = object : LiveData<UiState<State>>() {}
 
-    /**
-     * Send a DEBUG log message with event name and content.
-     */
-    open fun onEvent(event: Event) {
-        Log.d(javaClass.simpleName, "Event $event")
-    }
+    open fun onEvent(event: Event) {}
 }

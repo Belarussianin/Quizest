@@ -1,4 +1,4 @@
-package com.projectx.householdtasks.data.example.contracts.response
+package com.belarusianin.quizest.data.contracts.response
 
 import com.google.gson.annotations.SerializedName
 

@@ -5,29 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.belarusianin.quizest.presentation.model.UiEvent
+import com.belarusianin.quizest.presentation.model.event.NavEvent
+import com.belarusianin.quizest.presentation.model.event.UiEvent
+import com.belarusianin.quizest.presentation.model.state.UiState.Companion.process
 import com.belarusianin.quizest.presentation.viewmodel.BaseViewModel
 
 abstract class BaseFragment<Binding : ViewBinding, State : Any, Event : UiEvent> : Fragment() {
 
     private var _binding: Binding? = null
-    protected val binding: Binding get() = _binding!!
+    private val binding: Binding get() = _binding!!
     protected abstract fun getViewBinding(): Binding
 
-    protected val viewModel: BaseViewModel<State, Event> get() = getBaseViewModel().value
-    protected abstract fun getBaseViewModel(): Lazy<BaseViewModel<State, Event>>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = getViewBinding()
-    }
+    protected val viewModel: BaseViewModel<State, Event> by lazy { getBaseViewModel() }
+    protected abstract fun getBaseViewModel(): BaseViewModel<State, Event>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = binding.root
+    ) = getViewBinding().apply { _binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,7 +37,7 @@ abstract class BaseFragment<Binding : ViewBinding, State : Any, Event : UiEvent>
 
     open fun subscribeUI() = binding.apply {
         viewModel.state.observe(viewLifecycleOwner) { UiState ->
-            com.belarusianin.quizest.presentation.model.UiState.process(UiState,
+            process(UiState,
                 onLoading = { processLoading() },
                 onError = { message -> processError(message) },
                 onReady = { state: State -> processState(state) }
@@ -47,11 +45,17 @@ abstract class BaseFragment<Binding : ViewBinding, State : Any, Event : UiEvent>
         }
     }
 
-    abstract fun Binding.processLoading()
+    open fun Binding.processLoading() {}
 
-    abstract fun Binding.processError(message: String)
+    open fun Binding.processError(message: String) {}
 
-    abstract fun Binding.processState(state: State)
+    open fun Binding.processState(state: State) {}
+
+    open fun navigate(event: Event) {
+        when (event) {
+            NavEvent.NavBack -> findNavController().navigateUp()
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

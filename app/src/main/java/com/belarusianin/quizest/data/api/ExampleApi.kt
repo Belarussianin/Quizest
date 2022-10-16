@@ -1,4 +1,4 @@
-package com.projectx.householdtasks.data.example.api
+package com.belarusianin.quizest.data.api
 
 interface ExampleApi {
 }

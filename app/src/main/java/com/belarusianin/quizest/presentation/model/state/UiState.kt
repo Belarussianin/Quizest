@@ -1,4 +1,4 @@
-package com.belarusianin.quizest.presentation.model
+package com.belarusianin.quizest.presentation.model.state
 
 sealed interface UiState<out Type> {
     object Loading : UiState<Nothing>

@@ -1,4 +1,4 @@
-package com.projectx.householdtasks.data.example.repository
+package com.belarusianin.quizest.data.repository
 
 interface IRepository {
 }
